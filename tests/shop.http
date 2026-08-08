@@ -14,3 +14,24 @@ GET http://localhost:3000/shop/shop:h5Uvdc9TQDYdBwanjkwFC
 
 ### Testing an ID that doesn't work
 GET http://localhost:3000/shop/shop:h5Uvdc9TQDYdBwanjkwFc
+
+
+### Getting all inventory 
+GET http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
+
+
+### Posting a new product
+POST http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
+Content-Type: application/json
+{
+    productId: "prod:jK5xQ9mTc3WvN7rLp2YsH",
+    quantity: 12
+}
+
+### Updating a old product
+POST http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
+Content-Type: application/json 
+{
+    productId: "prod:V1StGXR8_Z5jdHi6B-myT",
+    quantity: 12
+}
