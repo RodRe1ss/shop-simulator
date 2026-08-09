@@ -1,19 +1,17 @@
 const inventoryServices = require("../services/inventoryServices");
 
-const getShopInventory = async (req, res) => {
+const getShopInventory = async (req, res, next) => {
   try {
     const inventory = await inventoryServices.getShopInventory(
       req.params.shopId,
     );
     res.json(inventory);
-  } catch (error) {
-    res.status(404).json({
-      error: error.message,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const addStock = async (req, res) => {
+const addStock = async (req, res, next) => {
   try {
     const shopId = req.params.shopId;
     const { productId, quantity } = req.body;
@@ -21,10 +19,8 @@ const addStock = async (req, res) => {
     const item = inventoryServices.addStock(shopId, productId, quantity);
 
     res.json(item);
-  } catch (error) {
-    res.status(400).json({
-      error: error.message,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 

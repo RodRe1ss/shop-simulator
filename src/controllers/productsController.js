@@ -1,26 +1,22 @@
 const productsServices = require("../services/productsServices");
 
-const getAll = async (req, res) => {
+const getAll = async (req, res, next) => {
   try {
     const products = await productsServices.getProducts();
 
     res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   try {
     const product = await productsServices.getProductById(req.params.id);
 
     res.status(200).json(product);
-  } catch (error) {
-    res.status(404).json({
-      error: error.message,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 

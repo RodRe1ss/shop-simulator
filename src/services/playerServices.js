@@ -1,12 +1,14 @@
 const playerRepository = require("../repositories/playerRepository");
 
+const ValidationError = require("../errors/ValidationError");
+
 const createPlayer = async (username) => {
   if (!username) {
-    throw new Error("Username is required");
+    throw new ValidationError("Username is required");
   }
 
   if (username.trim().length < 3) {
-    throw new Error("Username must be at least 3 characters.");
+    throw new ValidationError("Username must be at least 3 characters.");
   }
 
   return await playerRepository.create(username.trim());

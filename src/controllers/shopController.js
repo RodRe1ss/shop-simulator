@@ -1,34 +1,29 @@
 const shopServices = require("../services/shopServices");
+const NotFoundError = require("../errors/NotFoundError");
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   try {
     const { playerId, name } = req.body;
 
     const shop = await shopServices.createShop(playerId, name);
 
     res.status(201).json(shop);
-  } catch (error) {
-    res.status(400).json({
-      error: error.message,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   try {
     const shop = await shopServices.getShopById(req.params.id);
 
     if (!shop) {
-      res.status(404).json({
-        error: "Player not found",
-      });
+      throw new NotFoundError("Shop not found!");
     }
 
     res.status(200).json(shop);
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 

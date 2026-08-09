@@ -1,18 +1,21 @@
 const productsRepository = require("../repositories/productsRepository.js");
 
+const ValidationError = require("../errors/ValidationError");
+const NotFoundError = require("../errors/NotFoundError");
+
 const getProducts = async () => {
   return await productsRepository.getAll();
 };
 
 const getProductById = async (id) => {
   if (!id) {
-    throw new Error("Product ID is required");
+    throw new ValidationError("Product ID is required");
   }
 
   const product = await productsRepository.getById(id);
 
   if (!product) {
-    throw new Error("Product doesn't exist");
+    throw new NotFoundError("Product doesn't exist");
   }
 
   return product;

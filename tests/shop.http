@@ -35,3 +35,11 @@ Content-Type: application/json
     productId: "prod:V1StGXR8_Z5jdHi6B-myT",
     quantity: 12
 }
+
+### New
+POST http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
+Content-Type: application/json 
+{
+    productId: "prod:V1StGXR8_Z5jdHi6B-myp",
+    quantity: 12
+}

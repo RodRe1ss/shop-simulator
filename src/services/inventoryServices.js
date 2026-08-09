@@ -2,15 +2,18 @@ const productsRepository = require("../repositories/productsRepository");
 const shopRepository = require("../repositories/shopRepository");
 const inventoryRepository = require("../repositories/inventoryRepository");
 
+const ValidationError = require("../errors/ValidationError");
+const NotFoundError = require("../errors/NotFoundError");
+
 const getShopInventory = async (shopId) => {
   if (!shopId) {
-    throw new Error("Shop ID is required");
+    throw new ValidationError("Shop ID is required");
   }
 
   const existingShop = shopRepository.getById(shopId);
 
   if (!existingShop) {
-    throw new Error("Shop doesn't exist");
+    throw new NotFoundError("Shop doesn't exist");
   }
 
   return await inventoryRepository.getByShopId(shopId);
@@ -18,31 +21,31 @@ const getShopInventory = async (shopId) => {
 
 const addStock = async (shopId, productId, quantity) => {
   if (!shopId) {
-    throw new Error("Shop ID is required");
+    throw new ValidationError("Shop ID is required");
   }
 
   if (!productId) {
-    throw new Error("Product ID is required");
+    throw new ValidationError("Product ID is required");
   }
 
   if (quantity === undefined) {
-    throw new Error("Quantity is required");
+    throw new ValidationError("Quantity is required");
   }
 
   if (!Number.isInteger(quantity) || quantity <= 0) {
-    throw new Error("Quantity must be a positive integer");
+    throw new ValidationError("Quantity must be a positive integer");
   }
 
   const existingShop = shopRepository.getById(shopId);
 
   if (!existingShop) {
-    throw new Error("Shop doesn't exist");
+    throw new NotFoundError("Shop doesn't exist");
   }
 
   const existingProduct = productsRepository.getById(productId);
 
   if (!existingProduct) {
-    throw new Error("Product doesn't exist");
+    throw new NotFoundError("Product doesn't exist");
   }
 
   return await inventoryRepository.addStock(shopId, productId, quantity);
