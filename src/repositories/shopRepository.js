@@ -28,11 +28,6 @@ const getByPlayerId = async (playerId) => {
   )[0];
 };
 
-const getBalance = async (id) => {
-  return (await sql`
-    SELECT balance FROM shops
-    WHERE id = ${id};`)[0];
-}
 
 const updateBalance = async (id, amount) => {
   return (await sql`
@@ -47,6 +42,7 @@ module.exports = {
   create,
   getById,
   getByPlayerId,
+  updateBalance
 };
 
 const test = async () => {
@@ -61,7 +57,7 @@ const test = async () => {
     //   const playerShop = await getByPlayerId(created.player_id);
     //   console.log("Player Shop: ", playerShop);
     // }
-    const { balance } = await getBalance("shop:47XNU8SlyOk9xtptWXNy6");
+    const { balance } = await getById("shop:47XNU8SlyOk9xtptWXNy6");
 
     console.log("Current Balance: ", balance);
 
