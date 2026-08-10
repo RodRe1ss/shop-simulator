@@ -29,8 +29,8 @@ const getByPlayerId = async (playerId) => {
 };
 
 
-const updateBalance = async (id, amount) => {
-  return (await sql`
+const deductBalance = async (id, amount, db = sql) => {
+  return (await db`
     UPDATE shops
     SET balance = balance - ${amount}
     WHERE id = ${id}
@@ -42,7 +42,7 @@ module.exports = {
   create,
   getById,
   getByPlayerId,
-  updateBalance
+  deductBalance
 };
 
 const test = async () => {
@@ -61,7 +61,7 @@ const test = async () => {
 
     console.log("Current Balance: ", balance);
 
-    const newBalance = await updateBalance("shop:47XNU8SlyOk9xtptWXNy6", balance + 50);
+    const newBalance = await deductBalance("shop:47XNU8SlyOk9xtptWXNy6", 20);
 
     console.log("New Balance: ",newBalance);
     return;

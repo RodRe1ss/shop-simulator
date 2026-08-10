@@ -15,7 +15,7 @@ const getByShopId = async (shopId) => {
     ORDER BY products.name;`;
 };
 
-const getItem = async (shopId, productId) => {
+const getProduct = async (shopId, productId) => {
   return (
     await sql`
         SELECT * FROM inventory
@@ -24,9 +24,9 @@ const getItem = async (shopId, productId) => {
   )[0];
 };
 
-const addStock = async (shopId, productId, quantity) => {
+const addStock = async (shopId, productId, quantity, db = sql) => {
   return (
-    await sql`
+    await db`
     INSERT INTO inventory (shop_id, product_id, quantity)
     VALUES (${shopId}, ${productId}, ${quantity})
     ON CONFLICT (shop_id, product_id)
@@ -38,7 +38,7 @@ const addStock = async (shopId, productId, quantity) => {
 
 module.exports = {
   getByShopId,
-  getItem,
+  getProduct,
   addStock,
 };
 
