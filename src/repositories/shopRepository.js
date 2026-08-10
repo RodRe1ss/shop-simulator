@@ -28,6 +28,21 @@ const getByPlayerId = async (playerId) => {
   )[0];
 };
 
+const getBalance = async (id) => {
+  return (await sql`
+    SELECT balance FROM shops
+    WHERE id = ${id};`)[0];
+}
+
+const updateBalance = async (id, amount) => {
+  return (await sql`
+    UPDATE shops
+    SET balance = balance - ${amount}
+    WHERE id = ${id}
+    AND balance >= ${amount}
+    RETURNING balance;`)[0];
+}
+
 module.exports = {
   create,
   getById,
@@ -36,19 +51,26 @@ module.exports = {
 
 const test = async () => {
   try {
-    const created = await create("plyr:jwGDIxrp0COFfi5bJJxsQ", "test123");
-    created && console.log("Created: ", created);
+    // const created = await create("plyr:jwGDIxrp0COFfi5bJJxsQ", "test123");
+    // created && console.log("Created: ", created);
 
-    if (created) {
-      const shop = await getById(created.id);
-      console.log("Shop: ", shop);
+    // if (created) {
+    //   const shop = await getById(created.id);
+    //   console.log("Shop: ", shop);
 
-      const playerShop = await getByPlayerId(created.player_id);
-      console.log("Player Shop: ", playerShop);
-    }
+    //   const playerShop = await getByPlayerId(created.player_id);
+    //   console.log("Player Shop: ", playerShop);
+    // }
+    const { balance } = await getBalance("shop:47XNU8SlyOk9xtptWXNy6");
 
+    console.log("Current Balance: ", balance);
+
+    const newBalance = await updateBalance("shop:47XNU8SlyOk9xtptWXNy6", balance + 50);
+
+    console.log("New Balance: ",newBalance);
     return;
   } catch (error) {
+    console.log(error)
     console.log(error.code);
     console.log(error.table_name);
     console.log(error.constraint_name);
@@ -59,4 +81,4 @@ const test = async () => {
   }
 };
 
-// test();
+test();
