@@ -11,6 +11,6 @@ router.get("/:id", shopController.getById);
 
 router.get("/:shopId/inventory", inventoryController.getShopInventory);
 
-router.post("/:shopId/inventory", inventoryController.buyStock);
+router.post("/:shopId/inventory/buy-stock", inventoryController.buyStock);
 
 module.exports = router;
