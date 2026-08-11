@@ -5,8 +5,7 @@ const getByShopId = async (shopId) => {
     SELECT 
         products.id,
         products.name,
-        products.buy_price,
-        products.sell_price,
+        inventory.sell_price,
         inventory.quantity
     FROM inventory
     JOIN products

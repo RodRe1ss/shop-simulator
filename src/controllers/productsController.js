@@ -4,7 +4,7 @@ const getAll = async (req, res, next) => {
   try {
     const products = await productsServices.getProducts();
 
-    res.status(200).json(products);
+    res.json(products);
   } catch (err) {
     next(err);
   }
@@ -14,7 +14,7 @@ const getById = async (req, res, next) => {
   try {
     const product = await productsServices.getProductById(req.params.id);
 
-    res.status(200).json(product);
+    res.json(product);
   } catch (err) {
     next(err);
   }

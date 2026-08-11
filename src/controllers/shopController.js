@@ -21,7 +21,7 @@ const getById = async (req, res, next) => {
       throw new NotFoundError("Shop not found!");
     }
 
-    res.status(200).json(shop);
+    res.json(shop);
   } catch (err) {
     next(err);
   }

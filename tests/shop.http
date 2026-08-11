@@ -20,26 +20,22 @@ GET http://localhost:3000/shop/shop:h5Uvdc9TQDYdBwanjkwFc
 GET http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
 
 
-### Posting a new product
-POST http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
-Content-Type: application/json
-{
-    productId: "prod:jK5xQ9mTc3WvN7rLp2YsH",
-    quantity: 12
-}
-
-### Updating a old product
+### Buying product
 POST http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
 Content-Type: application/json 
-{
-    productId: "prod:V1StGXR8_Z5jdHi6B-myT",
-    quantity: 12
+
+{   
+    "productId": "prod:V1StGXR8_Z5jdHi6B-myT",
+    "supplierId": "splr:Q7mX2vL9kR4pT8nYc5HdW",
+    "quantity": 12
 }
 
-### New
+### Buying Stock
 POST http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory
 Content-Type: application/json 
+
 {
-    productId: "prod:V1StGXR8_Z5jdHi6B-myp",
-    quantity: 12
+    "productId": "prod:V1StGXR8_Z5jdHi6B-myp",
+    "supplierId": "splr:Q7mX2vL9kR4pT8nYc5HdW",
+    "quantity": 1
 }

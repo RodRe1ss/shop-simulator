@@ -11,14 +11,19 @@ const getShopInventory = async (req, res, next) => {
   }
 };
 
-const addStock = async (req, res, next) => {
+const buyStock = async (req, res, next) => {
   try {
     const shopId = req.params.shopId;
-    const { productId, quantity } = req.body;
+    const {
+      productId,
+      supplierId,
+      quantity,
+    } = req.body;
 
-    const item = inventoryServices.addStock(shopId, productId, quantity);
+    const result = await inventoryServices.buyStock(shopId, productId, supplierId, quantity);
 
-    res.json(item);
+    console.log(result)
+    res.json(result);
   } catch (err) {
     next(err);
   }
@@ -26,5 +31,5 @@ const addStock = async (req, res, next) => {
 
 module.exports = {
   getShopInventory,
-  addStock,
+  buyStock,
 };

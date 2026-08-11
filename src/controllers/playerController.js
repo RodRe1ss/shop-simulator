@@ -21,7 +21,7 @@ const getById = async (req, res, next) => {
       throw new NotFoundError("Player not found.");
     }
 
-    res.status(200).json(player);
+    res.json(player);
   } catch (err) {
     next(err);
   }
