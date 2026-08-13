@@ -12,6 +12,7 @@ const ConflictError = require("../errors/ConflictError");
 
 // SQL DB
 const sql = require("../db");
+const testFn = require("../utils/testFn");
 
 
 // Services
@@ -136,9 +137,52 @@ const sellProduct = async (shopId, productId, quantity) => {
   };
 };
 
+const setPrice = async (shopId, productId, price) => {
+  if (!shopId) {
+    throw new ValidationError("Shop ID required!")
+  }
+
+  if (!productId) {
+    throw new ValidationError("Product ID required!")
+  }
+
+  if (!Number.isInteger || price < 0) {
+    throw new ValidationError("Price must be a positive integer!")
+  }
+
+  const shop = await shopRepository.getById(shopId);
+  if (!shop) {
+    throw new NotFoundError("Shop not found!")
+  }
+
+  const product = await productsRepository.getById(productId)
+  if (!product) {
+    throw new NotFoundError("Product not found!")
+  }
+
+  const inventoryProduct = await inventoryRepository.getProduct(shopId, productId);
+  if (!inventoryProduct) {
+    throw new NotFoundError("Inventory product not found!")
+  }
+           
+  if (price < 20) {
+    throw new ConflictError("Must be a value of 20 or more!")
+  }
+  
+  return await inventoryRepository.setStockPrice(shopId, productId, price);
+}
+
 module.exports = {
   getByShopId,
   buyProduct,
   sellProduct,
+  setPrice,
 };
 
+const setPriceFn = {
+  title: "Set Price",
+  fn: setPrice,
+  args: ["shop:47XNU8SlyOk9xtptWXNy6", "prod:V1StGXR8_Z5jdHi6B-myT", 65]
+}
+
+testFn(setPriceFn);
