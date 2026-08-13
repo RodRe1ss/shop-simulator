@@ -13,6 +13,8 @@ router.get("/:shopId/inventory", inventoryController.getByShopId);
 
 router.post("/:shopId/inventory/buy-product", inventoryController.buyProduct);
 
-router.post("/:shopId/inventory/sell-product", inventoryController.sellProduct)
+router.post("/:shopId/inventory/sell-product", inventoryController.sellProduct);
+
+router.post("/:shopId/inventory/set-price", inventoryController.setPrice);
 
 module.exports = router;

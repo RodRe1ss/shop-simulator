@@ -22,3 +22,12 @@ Content-Type: application/json
     "productId": "prod:V1StGXR8_Z5jdHi6B-myT",
     "quantity": 2
 }
+
+### Setting price
+POST http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6/inventory/set-price
+Content-Type: application/json
+
+{
+    "productId": "prod:V1StGXR8_Z5jdHi6B-myT",
+    "price": 65
+}

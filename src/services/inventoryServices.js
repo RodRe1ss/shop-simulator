@@ -179,10 +179,3 @@ module.exports = {
   setPrice,
 };
 
-const setPriceFn = {
-  title: "Set Price",
-  fn: setPrice,
-  args: ["shop:47XNU8SlyOk9xtptWXNy6", "prod:V1StGXR8_Z5jdHi6B-myT", 65]
-}
-
-testFn(setPriceFn);

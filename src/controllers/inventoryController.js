@@ -45,8 +45,22 @@ const sellProduct = async (req, res, next) => {
   }
 }
 
+const setPrice = async (req, res, next) => {
+  try {
+    const { shopId } = req.params
+    const { productId, price } = req.body
+
+    const result = await inventoryServices.setPrice(shopId, productId, price);
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getByShopId,
   buyProduct,
-  sellProduct
+  sellProduct,
+  setPrice
 };
