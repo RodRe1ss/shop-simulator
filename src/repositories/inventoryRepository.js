@@ -1,5 +1,5 @@
 const sql = require("../db");
-const testFn = require("../utils/testFn");
+
 
 const getByShopId = async (shopId) => {
   return await sql`
@@ -15,7 +15,7 @@ const getByShopId = async (shopId) => {
     ORDER BY products.name;`;
 };
 
-const getProduct = async (shopId, productId) => {
+const getProductById = async (shopId, productId) => {
   return (
     await sql`
         SELECT * FROM inventory
@@ -48,15 +48,7 @@ const decreaseStock = async (shopId, productId, quantity, db = sql) => {
 
 module.exports = {
   getByShopId,
-  getProduct,
+  getProductById,
   increaseStock,
   decreaseStock
 };
-
-const stockFn = {
-  title: "stock",
-  fn: getByShopId,
-  args: ["shop:47XNU8SlyOk9xtptWXNy6"]
-}
-
-// testFn(stockFn);

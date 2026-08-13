@@ -1,5 +1,5 @@
 const sql = require("../db");
-const testFn = require("../utils/testFn");
+
 
 const getAll = async () => {
   return await sql`
@@ -19,13 +19,4 @@ module.exports = {
   getAll,
   getById,
 };
-
-
-const productsFn = {
-  title: "All results",
-  fn: getAll,
-  args: null
-}
-
-// testFn(productsFn);
 

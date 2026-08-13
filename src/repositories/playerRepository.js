@@ -1,6 +1,6 @@
 const getId = require("../utils/getId");
 const sql = require("../db");
-const testFn = require("../utils/testFn");
+
 
 const create = async (username) => {
     const id = getId("plyr")
@@ -22,10 +22,3 @@ module.exports = {
     getById
 }
 
-const createFn = {
-  title: "Created",
-  fn: create,
-  args: ["test123"]
-}
-
-// testFn(createFn);

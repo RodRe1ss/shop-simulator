@@ -1,6 +1,6 @@
 const sql = require("../db");
 const getId = require("../utils/getId");
-const testFn = require("../utils/testFn");
+
 
 const create = async (playerId, name) => {
   const id = getId("shop");
@@ -54,12 +54,3 @@ module.exports = {
   decreaseBalance,
   increaseBalance
 };
-
-// test();
-const shopFn = {
-  title: "Shop",
-  fn: getById,
-  args: ["shop:47XNU8SlyOk9xtptWXNy6"]
-}
-
-// testFn(shopFn);
