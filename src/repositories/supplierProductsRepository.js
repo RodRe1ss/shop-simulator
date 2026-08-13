@@ -6,7 +6,7 @@ const getBySupplierId = async (supplierId) => {
     WHERE supplier_id = ${supplierId};`;
 };
 
-const getProductBySupplierId = async (supplierId, productId) => {
+const getProduct = async (supplierId, productId) => {
   return (
     await sql`
     SELECT * FROM supplier_products
@@ -17,6 +17,6 @@ const getProductBySupplierId = async (supplierId, productId) => {
 
 module.exports = {
   getBySupplierId,
-  getProductBySupplierId,
+  getProduct,
 };
 

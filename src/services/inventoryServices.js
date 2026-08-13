@@ -12,10 +12,10 @@ const ConflictError = require("../errors/ConflictError");
 
 // SQL DB
 const sql = require("../db");
-const testFn = require("../utils/testFn");
+
 
 // Services
-const getInvByShopId = async (shopId) => {
+const getByShopId = async (shopId) => {
   if (!shopId) {
     throw new ValidationError("Shop ID is required");
   }
@@ -29,7 +29,7 @@ const getInvByShopId = async (shopId) => {
   return await inventoryRepository.getByShopId(shopId);
 };
 
-const buyInvProduct = async (shopId, productId, supplierId, quantity) => {
+const buyProduct = async (shopId, productId, supplierId, quantity) => {
   if (!shopId) {
     throw new ValidationError("Shop ID required!");
   }
@@ -56,12 +56,12 @@ const buyInvProduct = async (shopId, productId, supplierId, quantity) => {
     throw new NotFoundError("Product not found!");
   }
 
-  const supplier = await suppliersRepository.getSupplierById(supplierId);
+  const supplier = await suppliersRepository.getById(supplierId);
   if (!supplier) {
     throw new NotFoundError("Supplier not found!");
   }
 
-  const supplierProduct = await supplierProductsRepository.getSupplierProduct(
+  const supplierProduct = await supplierProductsRepository.getProduct(
     supplierId,
     productId,
   );
@@ -87,7 +87,7 @@ const buyInvProduct = async (shopId, productId, supplierId, quantity) => {
   };
 };
 
-const sellInvProduct = async (shopId, productId, quantity) => {
+const sellProduct = async (shopId, productId, quantity) => {
   if (!shopId) {
     throw new ValidationError("Shop ID required!");
   }
@@ -137,15 +137,8 @@ const sellInvProduct = async (shopId, productId, quantity) => {
 };
 
 module.exports = {
-  getInvByShopId,
-  buyInvProduct,
-  sellInvProduct,
+  getByShopId,
+  buyProduct,
+  sellProduct,
 };
 
-const sellStockFn = {
-  title: "Sold",
-  fn: sellInvProduct,
-  args: ["shop:47XNU8SlyOk9xtptWXNy6", "prod:V1StGXR8_Z5jdHi6B-myT", 1],
-};
-
-// testFn(sellStockFn);

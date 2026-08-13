@@ -5,7 +5,7 @@ const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
 const ConflictError = require("../errors/ConflictError");
 
-const createShop = async (playerId, name) => {
+const create = async (playerId, name) => {
   if (!playerId) {
     throw new ValidationError("Player ID is required");
   }
@@ -33,11 +33,11 @@ const createShop = async (playerId, name) => {
   return await shopRepository.create(playerId, name.trim());
 };
 
-const getShopById = async (id) => {
+const getById = async (id) => {
   return await shopRepository.getById(id);
 };
 
 module.exports = {
-  createShop,
-  getShopById,
+  create,
+  getById,
 };

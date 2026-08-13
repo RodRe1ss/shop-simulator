@@ -15,7 +15,7 @@ const getByShopId = async (shopId) => {
     ORDER BY products.name;`;
 };
 
-const getProductById = async (shopId, productId) => {
+const getProduct = async (shopId, productId) => {
   return (
     await sql`
         SELECT * FROM inventory
@@ -48,7 +48,7 @@ const decreaseStock = async (shopId, productId, quantity, db = sql) => {
 
 module.exports = {
   getByShopId,
-  getProductById,
+  getProduct,
   increaseStock,
   decreaseStock
 };

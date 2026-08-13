@@ -14,12 +14,6 @@ app.use("/players", playerRoutes);
 app.use("/shop", shopRoutes);
 app.use("/products", productsRoutes);
 
-// app.use("/", (req, res, next) => {
-//   const error1 = new Error("Unexpected");
-
-//   next(error1);
-// });
-
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;

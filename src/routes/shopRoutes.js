@@ -9,10 +9,10 @@ router.post("/", shopController.create);
 
 router.get("/:id", shopController.getById);
 
-router.get("/:shopId/inventory", inventoryController.getInvByShopId);
+router.get("/:shopId/inventory", inventoryController.getByShopId);
 
-router.post("/:shopId/inventory/buy-stock", inventoryController.buyInvProduct);
+router.post("/:shopId/inventory/buy-product", inventoryController.buyProduct);
 
-router.post("/:shopId/inventory/sell-stock", inventoryController.sellInvProduct)
+router.post("/:shopId/inventory/sell-product", inventoryController.sellProduct)
 
 module.exports = router;

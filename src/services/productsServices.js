@@ -2,13 +2,13 @@ const productsRepository = require("../repositories/productsRepository.js");
 
 const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
-const testFn = require("../utils/testFn.js");
 
-const getProducts = async () => {
+
+const getAll = async () => {
   return await productsRepository.getAll();
 };
 
-const getProductById = async (id) => {
+const getById = async (id) => {
   if (!id) {
     throw new ValidationError("Product ID is required");
   }
@@ -23,8 +23,8 @@ const getProductById = async (id) => {
 };
 
 module.exports = {
-  getProducts,
-  getProductById,
+  getAll,
+  getById,
 };
 
 

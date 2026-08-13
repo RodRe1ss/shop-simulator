@@ -5,7 +5,7 @@ const create = async (req, res, next) => {
   try {
     const { username } = req.body;
 
-    const player = await playerServices.createPlayer(username);
+    const player = await playerServices.create(username);
 
     res.status(201).json(player);
   } catch (err) {
@@ -15,7 +15,7 @@ const create = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const player = await playerServices.getPlayerById(req.params.id);
+    const player = await playerServices.getById(req.params.id);
 
     if (!player) {
       throw new NotFoundError("Player not found.");

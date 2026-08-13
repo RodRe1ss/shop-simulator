@@ -5,7 +5,7 @@ const create = async (req, res, next) => {
   try {
     const { playerId, name } = req.body;
 
-    const shop = await shopServices.createShop(playerId, name);
+    const shop = await shopServices.create(playerId, name);
 
     res.status(201).json(shop);
   } catch (err) {
@@ -15,7 +15,7 @@ const create = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const shop = await shopServices.getShopById(req.params.id);
+    const shop = await shopServices.getById(req.params.id);
 
     if (!shop) {
       throw new NotFoundError("Shop not found!");
