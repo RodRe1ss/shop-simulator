@@ -1,5 +1,6 @@
 const sql = require("../db");
 
+const testFn = require("../utils/testFn");
 
 const getByShopId = async (shopId) => {
   return await sql`
@@ -37,18 +38,33 @@ const increaseStock = async (shopId, productId, quantity, db = sql) => {
 };
 
 const decreaseStock = async (shopId, productId, quantity, db = sql) => {
-  return (await db`
+  return (
+    await db`
   UPDATE inventory
   SET quantity = quantity - ${quantity}
   WHERE shop_id = ${shopId}
   AND product_id = ${productId}
   AND quantity >= ${quantity}
-  RETURNING quantity;`)[0];
-}
+  RETURNING quantity;`
+  )[0];
+};
+
+const setStockPrice = async (shopId, productId, price, db = sql) => {
+  return (
+    await db`
+    UPDATE inventory
+    SET sell_price = ${price}
+    WHERE shop_id = ${shopId}
+    AND product_id = ${productId}
+    AND ${price} >= 20
+    RETURNING sell_price;`
+  )[0];
+};
 
 module.exports = {
   getByShopId,
   getProduct,
   increaseStock,
-  decreaseStock
+  decreaseStock,
+  setStockPrice,
 };
