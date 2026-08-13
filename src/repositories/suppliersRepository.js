@@ -1,4 +1,5 @@
 const sql = require("../db");
+const testFn = require("../utils/testFn");
 
 const getSuppliers = async () => {
     return await sql`
@@ -16,18 +17,11 @@ module.exports = {
     getSupplierById,
 }
 
-const test = async () => {
-    try {
-        // const suppliers = await getSuppliers();
-        // console.log(suppliers);
 
-        const supplier = await getSupplierById('splr:W3kR8mX5qL2vN7tY9cHdP');
-        console.log(supplier);
-    } catch (error) {
-        console.log(error)
-    } finally {
-        process.exit(0);
-    }
-}
+const supplierFn = {
+  title: "Supplier",
+  fn: getSupplierById,
+  args: ["splr:W3kR8mX5qL2vN7tY9cHdP"],
+};
 
-// test();
+// testFn(supplierFn);

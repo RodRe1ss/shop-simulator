@@ -1,5 +1,6 @@
 const sql = require("../db");
 const getId = require("../utils/getId");
+const testFn = require("../utils/testFn");
 
 const create = async (playerId, name) => {
   const id = getId("shop");
@@ -29,7 +30,7 @@ const getByPlayerId = async (playerId) => {
 };
 
 
-const deductBalance = async (id, amount, db = sql) => {
+const decreaseBalance = async (id, amount, db = sql) => {
   return (await db`
     UPDATE shops
     SET balance = balance - ${amount}
@@ -38,43 +39,27 @@ const deductBalance = async (id, amount, db = sql) => {
     RETURNING balance;`)[0];
 }
 
+const increaseBalance = async (id, amount, db = sql) => {
+  return (await db`
+    UPDATE shops
+    SET balance = balance + ${amount}
+    WHERE id = ${id}
+    RETURNING balance;`)[0];
+}
+
 module.exports = {
   create,
   getById,
   getByPlayerId,
-  deductBalance
-};
-
-const test = async () => {
-  try {
-    // const created = await create("plyr:jwGDIxrp0COFfi5bJJxsQ", "test123");
-    // created && console.log("Created: ", created);
-
-    // if (created) {
-    //   const shop = await getById(created.id);
-    //   console.log("Shop: ", shop);
-
-    //   const playerShop = await getByPlayerId(created.player_id);
-    //   console.log("Player Shop: ", playerShop);
-    // }
-    const { balance } = await getById("shop:47XNU8SlyOk9xtptWXNy6");
-
-    console.log("Current Balance: ", balance);
-
-    const newBalance = await deductBalance("shop:47XNU8SlyOk9xtptWXNy6", 20);
-
-    console.log("New Balance: ",newBalance);
-    return;
-  } catch (error) {
-    console.log(error)
-    console.log(error.code);
-    console.log(error.table_name);
-    console.log(error.constraint_name);
-    console.log(error.detail);
-    return;
-  } finally {
-    process.exit(0);
-  }
+  decreaseBalance,
+  increaseBalance
 };
 
 // test();
+const shopFn = {
+  title: "Shop",
+  fn: getById,
+  args: ["shop:47XNU8SlyOk9xtptWXNy6"]
+}
+
+// testFn(shopFn);

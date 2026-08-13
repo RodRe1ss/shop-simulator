@@ -8,12 +8,14 @@ const suppliersRepository = require("../repositories/suppliersRepository");
 // Error Classes
 const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
+const ConflictError = require("../errors/ConflictError");
 
 // SQL DB
 const sql = require("../db");
+const testFn = require("../utils/testFn");
 
 // Services
-const getShopInventory = async (shopId) => {
+const getInvByShopId = async (shopId) => {
   if (!shopId) {
     throw new ValidationError("Shop ID is required");
   }
@@ -27,7 +29,7 @@ const getShopInventory = async (shopId) => {
   return await inventoryRepository.getByShopId(shopId);
 };
 
-const buyStock = async (shopId, productId, supplierId, quantity) => {
+const buyInvProduct = async (shopId, productId, supplierId, quantity) => {
   if (!shopId) {
     throw new ValidationError("Shop ID required!");
   }
@@ -56,10 +58,13 @@ const buyStock = async (shopId, productId, supplierId, quantity) => {
 
   const supplier = await suppliersRepository.getSupplierById(supplierId);
   if (!supplier) {
-    throw new NotFoundError("Supplier not found!")
+    throw new NotFoundError("Supplier not found!");
   }
 
-  const supplierProduct = await supplierProductsRepository.getSupplierProduct(supplierId, productId);
+  const supplierProduct = await supplierProductsRepository.getSupplierProduct(
+    supplierId,
+    productId,
+  );
   if (!supplierProduct) {
     throw new NotFoundError("Supplier doesn't sell this product!");
   }
@@ -67,75 +72,80 @@ const buyStock = async (shopId, productId, supplierId, quantity) => {
   const cost = supplierProduct.price * quantity;
 
   if (shop.balance < cost) {
-    throw new Error("Insufficient shop balance!");
+    throw new ConflictError("Insufficient shop balance!");
   }
 
   await sql.begin(async (tx) => {
-    await shopRepository.deductBalance(shopId, cost, tx);
-    await inventoryRepository.addStock(shopId, productId, quantity, tx);
-  })
+    await shopRepository.decreaseBalance(shopId, cost, tx);
+    await inventoryRepository.increaseStock(shopId, productId, quantity, tx);
+  });
 
   return {
     productId,
     quantity,
-    cost
-  }
+    cost,
+  };
 };
 
+const sellInvProduct = async (shopId, productId, quantity) => {
+  if (!shopId) {
+    throw new ValidationError("Shop ID required!");
+  }
+
+  if (!productId) {
+    throw new ValidationError("Product ID required!");
+  }
+
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    throw new ValidationError("Quantity must be a positive integer");
+  }
+
+  const shop = await shopRepository.getById(shopId);
+  if (!shop) {
+    throw new NotFoundError("Shop not found!");
+  }
+
+  const product = await productsRepository.getById(productId);
+  if (!product) {
+    throw new NotFoundError("Product not found!");
+  }
+
+  const inventoryProduct = await inventoryRepository.getProduct(
+    shopId,
+    productId,
+  );
+  if (!inventoryProduct) {
+    throw new NotFoundError("Inventory Product not found!");
+  }
+
+  if (inventoryProduct.quantity < quantity) {
+    throw new ConflictError("Insufficient product inventory amount!");
+  }
+
+  const cost = inventoryProduct.sell_price * quantity;
+
+  await sql.begin(async (tx) => {
+    await shopRepository.increaseBalance(shopId, cost, tx);
+    await inventoryRepository.decreaseStock(shopId, productId, quantity, tx);
+  });
+
+  return {
+    productId,
+    amount: quantity,
+    moneyMade: cost,
+  };
+};
 
 module.exports = {
-  getShopInventory,
-  buyStock,
+  getInvByShopId,
+  buyInvProduct,
+  sellInvProduct,
 };
 
-
-const test = async () => {
-
-  try {
-    const stock = await buyStock("shop:47XNU8SlyOk9xtptWXNy6","prod:V1StGXR8_Z5jdHi6B-myT", "splr:Q7mX2vL9kR4pT8nYc5HdW", 12);
-    console.log("Stock: ", stock)
-
-    // const result = await testTransaction();
-    // console.log("Transaction Result: ", result)
-
-    // const deducted = await shopRepository.deductBalance(
-    //   "shop:47XNU8SlyOk9xtptWXNy6",
-    //   "Hello",
-    // );
-    // deducted && console.log("Deducted: ", deducted);
-    // const result = await testTransaction();
-
-    // console.log("Transaction Result: ", result);
-
-    // const stock = await getShopInventory("shop:47XNU8SlyOk9xtptWXNy6");
-    // stock && console.log("Stock: ", stock);
-
-    // const addedStock = await addStock(
-    //   "shop:47XNU8SlyOk9xtptWXNy6",
-    //   stock[1].id,
-    //   "5",
-    // );
-
-    // console.log("Added Stock: ", addedStock);
-
-    // const newItem = await addStock(
-    //   "shop:47XNU8SlyOk9xtptWXNy6",
-    //   "prod:cR3mX7kNp5VjQ9wLt2HsY",
-    //   5,
-    // );
-    // console.log("New Item: ", newItem);
-
-    return;
-  } catch (error) {
-    console.log(error);
-    error.code && console.log(error.code);
-    error.table_name && console.log(error.table_name);
-    error.constraint_name && console.log(error.constraint_name);
-    error.detail && console.log(error.detail);
-    return;
-  } finally {
-    process.exit(0);
-  }
+const sellStockFn = {
+  title: "Sold",
+  fn: sellInvProduct,
+  args: ["shop:47XNU8SlyOk9xtptWXNy6", "prod:V1StGXR8_Z5jdHi6B-myT", 1],
 };
 
-// test()
+// testFn(sellStockFn);

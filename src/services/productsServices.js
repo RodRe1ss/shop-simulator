@@ -2,6 +2,7 @@ const productsRepository = require("../repositories/productsRepository.js");
 
 const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
+const testFn = require("../utils/testFn.js");
 
 const getProducts = async () => {
   return await productsRepository.getAll();
@@ -26,25 +27,4 @@ module.exports = {
   getProductById,
 };
 
-const test = async () => {
-  try {
-    const all = await getProducts();
-    all && console.log("All results: ", all);
 
-    const one = await getProductById("");
-    one && console.log("One result: ", one);
-
-    return;
-  } catch (error) {
-    console.log(error);
-    console.log(error.code);
-    console.log(error.table_name);
-    console.log(error.constraint_name);
-    console.log(error.detail);
-    return;
-  } finally {
-    process.exit(0);
-  }
-};
-
-// test();

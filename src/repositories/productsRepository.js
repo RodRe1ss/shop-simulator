@@ -1,4 +1,5 @@
 const sql = require("../db");
+const testFn = require("../utils/testFn");
 
 const getAll = async () => {
   return await sql`
@@ -19,24 +20,12 @@ module.exports = {
   getById,
 };
 
-const test = async () => {
-  try {
-    const all = await getAll();
-    all && console.log("All results: ", all);
 
-    const one = await getById(all[3].id);
-    one && console.log("One result: ", one);
+const productsFn = {
+  title: "All results",
+  fn: getAll,
+  args: null
+}
 
-    return;
-  } catch (error) {
-    console.log(error.code);
-    console.log(error.table_name);
-    console.log(error.constraint_name);
-    console.log(error.detail);
-    return;
-  } finally {
-    process.exit(0);
-  }
-};
+// testFn(productsFn);
 
-// test();

@@ -1,8 +1,8 @@
 const inventoryServices = require("../services/inventoryServices");
 
-const getShopInventory = async (req, res, next) => {
+const getInvByShopId = async (req, res, next) => {
   try {
-    const inventory = await inventoryServices.getShopInventory(
+    const inventory = await inventoryServices.getInvByShopId(
       req.params.shopId,
     );
     res.json(inventory);
@@ -11,7 +11,7 @@ const getShopInventory = async (req, res, next) => {
   }
 };
 
-const buyStock = async (req, res, next) => {
+const buyInvProduct = async (req, res, next) => {
   try {
     const shopId = req.params.shopId;
     const {
@@ -20,7 +20,7 @@ const buyStock = async (req, res, next) => {
       quantity,
     } = req.body;
 
-    const result = await inventoryServices.buyStock(shopId, productId, supplierId, quantity);
+    const result = await inventoryServices.buyInvProduct(shopId, productId, supplierId, quantity);
 
     console.log(result)
     res.json(result);
@@ -29,7 +29,25 @@ const buyStock = async (req, res, next) => {
   }
 };
 
+const sellInvProduct = async (req, res, next) => {
+  try {
+    const { shopId } = req.params
+
+    const {
+      productId,
+      quantity
+    } = req.body
+
+    const result = await inventoryServices.sellInvProduct(shopId, productId, quantity)
+
+    res.json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
-  getShopInventory,
-  buyStock,
+  getInvByShopId,
+  buyInvProduct,
+  sellInvProduct
 };

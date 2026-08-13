@@ -41,25 +41,3 @@ module.exports = {
   createShop,
   getShopById,
 };
-
-const test = async () => {
-  try {
-    const created = await createShop("plyr:jwGDIxrp0COFfi5bJJxsQ", "test123");
-    console.log("Created: ", created);
-
-    const fetched = await getShopById(created.id);
-    console.log("Fetched: ", fetched);
-    return;
-  } catch (error) {
-    error.schema_name !== "public" && console.log(error);
-    error.code && console.log(error.code);
-    error.table_name && console.log(error.table_name);
-    error.constraint_name && console.log(error.constraint_name);
-    error.detail && console.log(error.detail);
-    return;
-  } finally {
-    process.exit(0);
-  }
-};
-
-// test();
