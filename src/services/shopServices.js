@@ -52,14 +52,31 @@ const updateStatus = async (shopId, status) => {
   }
 
   if (!["CLOSED", "OPEN"].includes(status)) {
-    throw new ConflictError("Invalid status");
+    throw new ConflictError("Invalid status!");
   }
 
   return await shopRepository.updateStatus(shopId, status);
 };
 
+const updateName = async (shopId, name) => {
+  if (!shopId) {
+    throw new ValidationError("Shop ID required!");
+  }
+
+  if (!name) {
+    throw new ValidationError("Name required");
+  }
+
+  const shop = await shopRepository.getById(shopId);
+  if (!shop) {
+    throw new NotFoundError("Shop not found!");
+  }
+
+  return await shopRepository.updateName(shopId, name);
+};
+
 module.exports = {
   create,
   getById,
-  updateStatus,
+  updateName,
 };

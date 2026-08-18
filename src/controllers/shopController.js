@@ -40,8 +40,22 @@ const updateStatus = async (req, res, next) => {
   }
 };
 
+const updateName = async (req, res, next) => {
+  try {
+    const shopId = req.params.id;
+    const name = req.body?.name;
+
+    const result = await shopServices.updateName(shopId, name);
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   create,
   getById,
   updateStatus,
+  updateName,
 };

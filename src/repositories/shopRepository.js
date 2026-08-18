@@ -59,6 +59,16 @@ const updateStatus = async (shopId, status, db = sql) => {
   )[0];
 };
 
+const updateName = async (shopId, name, db = sql) => {
+  return (
+    await db`
+    UPDATE shops
+    SET name = ${name}
+    WHERE id = ${shopId}
+    RETURNING *;`
+  )[0];
+};
+
 module.exports = {
   create,
   getById,
@@ -66,4 +76,5 @@ module.exports = {
   decreaseBalance,
   increaseBalance,
   updateStatus,
+  updateName,
 };

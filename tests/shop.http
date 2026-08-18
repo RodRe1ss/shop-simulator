@@ -15,6 +15,15 @@ Content-Type: application/json
     "status": "CLOSED"
 }
 
+### Update name
+PUT http://localhost:3000/shop/name/shop:47XNU8SlyOk9xtptWXNy6
+Content-Type: application/json
+
+{
+    "name": "test-12331"
+}
+
+
 
 ### Get Shop By Id
 GET http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6

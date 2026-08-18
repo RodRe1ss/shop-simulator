@@ -11,6 +11,8 @@ router.get("/:id", shopController.getById);
 
 router.put("/status/:id", shopController.updateStatus);
 
+router.put("/name/:id", shopController.updateName);
+
 router.get("/:shopId/inventory", inventoryController.getByShopId);
 
 router.post("/:shopId/inventory/buy-product", inventoryController.buyProduct);
