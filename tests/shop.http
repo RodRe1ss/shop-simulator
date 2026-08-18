@@ -7,9 +7,17 @@ Content-Type: application/json
     "name": "test-shop456"
 }
 
+### Update Status
+PUT http://localhost:3000/shop/status/shop:47XNU8SlyOk9xtptWXNy6
+Content-Type: application/json
+
+{
+    "status": "CLOSED"
+}
+
 
 ### Get Shop By Id
-GET http://localhost:3000/shop/shop:h5Uvdc9TQDYdBwanjkwFC
+GET http://localhost:3000/shop/shop:47XNU8SlyOk9xtptWXNy6
 
 
 ### Testing an ID that doesn't work

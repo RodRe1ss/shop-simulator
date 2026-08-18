@@ -1,7 +1,6 @@
 const sql = require("../db");
 const getId = require("../utils/getId");
 
-
 const create = async (playerId, name) => {
   const id = getId("shop");
 
@@ -29,28 +28,42 @@ const getByPlayerId = async (playerId) => {
   )[0];
 };
 
-
 const decreaseBalance = async (id, amount, db = sql) => {
-  return (await db`
+  return (
+    await db`
     UPDATE shops
     SET balance = balance - ${amount}
     WHERE id = ${id}
     AND balance >= ${amount}
-    RETURNING balance;`)[0];
-}
+    RETURNING balance;`
+  )[0];
+};
 
 const increaseBalance = async (id, amount, db = sql) => {
-  return (await db`
+  return (
+    await db`
     UPDATE shops
     SET balance = balance + ${amount}
     WHERE id = ${id}
-    RETURNING balance;`)[0];
-}
+    RETURNING balance;`
+  )[0];
+};
+
+const updateStatus = async (shopId, status, db = sql) => {
+  return (
+    await db`
+    UPDATE shops
+    SET status = ${status}
+    WHERE id = ${shopId}
+    RETURNING *;`
+  )[0];
+};
 
 module.exports = {
   create,
   getById,
   getByPlayerId,
   decreaseBalance,
-  increaseBalance
+  increaseBalance,
+  updateStatus,
 };

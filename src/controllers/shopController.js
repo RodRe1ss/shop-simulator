@@ -27,7 +27,21 @@ const getById = async (req, res, next) => {
   }
 };
 
+const updateStatus = async (req, res, next) => {
+  try {
+    const shopId = req.params.id;
+    const status = req.body?.status;
+
+    const result = await shopServices.updateStatus(shopId, status);
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   create,
   getById,
+  updateStatus,
 };

@@ -37,7 +37,29 @@ const getById = async (id) => {
   return await shopRepository.getById(id);
 };
 
+const updateStatus = async (shopId, status) => {
+  if (!shopId) {
+    throw new ValidationError("Shop ID required!");
+  }
+
+  if (!status) {
+    throw new ValidationError("Status required");
+  }
+
+  const shop = await shopRepository.getById(shopId);
+  if (!shop) {
+    throw new NotFoundError("Shop not found!");
+  }
+
+  if (!["CLOSED", "OPEN"].includes(status)) {
+    throw new ConflictError("Invalid status");
+  }
+
+  return await shopRepository.updateStatus(shopId, status);
+};
+
 module.exports = {
   create,
   getById,
+  updateStatus,
 };
