@@ -14,7 +14,6 @@ const ConflictError = require("../errors/ConflictError");
 const sql = require("../db");
 const testFn = require("../utils/testFn");
 
-
 // Services
 const getByShopId = async (shopId) => {
   if (!shopId) {
@@ -105,6 +104,9 @@ const sellProduct = async (shopId, productId, quantity) => {
   if (!shop) {
     throw new NotFoundError("Shop not found!");
   }
+  if (shop.status === "CLOSED") {
+    throw new ConflictError("Can't sell products, shop closed!");
+  }
 
   const product = await productsRepository.getById(productId);
   if (!product) {
@@ -139,38 +141,41 @@ const sellProduct = async (shopId, productId, quantity) => {
 
 const setPrice = async (shopId, productId, price) => {
   if (!shopId) {
-    throw new ValidationError("Shop ID required!")
+    throw new ValidationError("Shop ID required!");
   }
 
   if (!productId) {
-    throw new ValidationError("Product ID required!")
+    throw new ValidationError("Product ID required!");
   }
 
   if (!Number.isInteger || price < 0) {
-    throw new ValidationError("Price must be a positive integer!")
+    throw new ValidationError("Price must be a positive integer!");
   }
 
   const shop = await shopRepository.getById(shopId);
   if (!shop) {
-    throw new NotFoundError("Shop not found!")
+    throw new NotFoundError("Shop not found!");
   }
 
-  const product = await productsRepository.getById(productId)
+  const product = await productsRepository.getById(productId);
   if (!product) {
-    throw new NotFoundError("Product not found!")
+    throw new NotFoundError("Product not found!");
   }
 
-  const inventoryProduct = await inventoryRepository.getProduct(shopId, productId);
+  const inventoryProduct = await inventoryRepository.getProduct(
+    shopId,
+    productId,
+  );
   if (!inventoryProduct) {
-    throw new NotFoundError("Inventory product not found!")
+    throw new NotFoundError("Inventory product not found!");
   }
-           
+
   if (price < 20) {
-    throw new ConflictError("Must be a value of 20 or more!")
+    throw new ConflictError("Must be a value of 20 or more!");
   }
-  
+
   return await inventoryRepository.setStockPrice(shopId, productId, price);
-}
+};
 
 module.exports = {
   getByShopId,
@@ -178,4 +183,3 @@ module.exports = {
   sellProduct,
   setPrice,
 };
-
