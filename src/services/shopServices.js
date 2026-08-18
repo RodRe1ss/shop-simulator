@@ -78,5 +78,6 @@ const updateName = async (shopId, name) => {
 module.exports = {
   create,
   getById,
+  updateStatus,
   updateName,
 };
