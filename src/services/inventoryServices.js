@@ -1,6 +1,7 @@
 // Repositories
 const productsRepository = require("../repositories/productsRepository");
 const shopRepository = require("../repositories/shopRepository");
+const shopFinanceRepository = require("../repositories/shopFinanceRepository");
 const inventoryRepository = require("../repositories/inventoryRepository");
 const supplierProductsRepository = require("../repositories/supplierProductsRepository");
 const suppliersRepository = require("../repositories/suppliersRepository");
@@ -78,6 +79,7 @@ const buyProduct = async (shopId, productId, supplierId, quantity) => {
   await sql.begin(async (tx) => {
     await shopRepository.decreaseBalance(shopId, cost, tx);
     await inventoryRepository.increaseStock(shopId, productId, quantity, tx);
+    await shopFinanceRepository.updateTotalSpent(shopId, cost, tx);
   });
 
   return {
@@ -130,6 +132,7 @@ const sellProduct = async (shopId, productId, quantity) => {
   await sql.begin(async (tx) => {
     await shopRepository.increaseBalance(shopId, cost, tx);
     await inventoryRepository.decreaseStock(shopId, productId, quantity, tx);
+    await shopFinanceRepository.updateTotalEarned(shopId, cost, tx)
   });
 
   return {

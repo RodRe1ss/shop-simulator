@@ -1,9 +1,17 @@
+// Database
+const sql = require("../db");
+
+// Repositories
 const shopRepository = require("../repositories/shopRepository");
 const playerRepository = require("../repositories/playerRepository");
+const shopFinanceRepository = require("../repositories/shopFinanceRepository");
 
+// Error handlers
 const ValidationError = require("../errors/ValidationError");
 const NotFoundError = require("../errors/NotFoundError");
 const ConflictError = require("../errors/ConflictError");
+
+
 
 const create = async (playerId, name) => {
   if (!playerId) {
@@ -29,8 +37,15 @@ const create = async (playerId, name) => {
   if (existingShop) {
     throw new ConflictError("Player already owns a shop");
   }
+  
 
-  return await shopRepository.create(playerId, name.trim());
+  return await sql.begin(async (tx) => {
+    const shop = await shopRepository.create(playerId, name.trim(), tx);
+
+    await shopFinanceRepository.create(shop.id, tx);
+
+    return shop;
+  });
 };
 
 const getById = async (id) => {
@@ -81,3 +96,4 @@ module.exports = {
   updateStatus,
   updateName,
 };
+

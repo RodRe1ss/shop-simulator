@@ -1,11 +1,11 @@
 const sql = require("../db");
 const getId = require("../utils/getId");
 
-const create = async (playerId, name) => {
+const create = async (playerId, name, db = sql) => {
   const id = getId("shop");
 
   return (
-    await sql`
+    await db`
         INSERT INTO shops (id, player_id, name)
         VALUES (${id}, ${playerId}, ${name})
         RETURNING *;`

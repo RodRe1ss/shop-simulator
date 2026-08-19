@@ -12,7 +12,7 @@ PUT http://localhost:3000/shop/status/shop:47XNU8SlyOk9xtptWXNy6
 Content-Type: application/json
 
 {
-    "status": "CLOSED"
+    "status": "OPEN"
 }
 
 ### Update name
