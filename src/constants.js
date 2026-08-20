@@ -1,0 +1,5 @@
+module.exports = {
+    MAX_CUSTOMERS: 50,
+    MAX_CUSTOMER_BASKET: 5,
+    MAX_PRODUCT_QUANTITY: 5
+}
